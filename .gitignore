@@ -1,0 +1,24 @@
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.sln.docstates
+.vs
+.git
+*.bin
+
+BinaryBeat/Models/*.bin
+BinaryBeat/bin
+BinaryBeat/obj
+BinaryBeat/.vs
+
+BinaryBeat.Core/bin
+BinaryBeat.Core/obj
+BinaryBeat.Core/*.dylib
+BinaryBeat.Core/*.so
+BinaryBeat.Core/*.dll
+
+# AI Modeller (Viktigt!)
+Models/*.bin
+Models/*.ggml
+*.metal

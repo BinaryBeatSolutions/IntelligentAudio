@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BinaryBeat/BinaryBeat.csproj" />
+  <Project Path="BinaryBeat.Core/BinaryBeat.Core.csproj" />
+</Solution>
