@@ -1,0 +1,117 @@
+<max7obj>
+	<patcher>
+		<fileversion>1</fileversion>
+		<appversion>
+			<major>8</major>
+			<minor>5</minor>
+			<revision>0</revision>
+		</appversion>
+		<boxes>
+			<obj>
+				<id>obj-1</id>
+				<maxclass>newobj</maxclass>
+				<text>udpreceive 7000</text>
+				<patching_rect>[50.0, 50.0, 97.0, 22.0]</patching_rect>
+			</obj>
+			<obj>
+				<id>obj-2</id>
+				<maxclass>newobj</maxclass>
+				<text>route /binarybeat/chord /binarybeat/command</text>
+				<patching_rect>[50.0, 100.0, 250.0, 22.0]</patching_rect>
+			</obj>
+			<obj>
+				<id>obj-3</id>
+				<maxclass>live.comment</maxclass>
+				<text>Waiting for Chord...</text>
+				<presentation>1</presentation>
+				<presentation_rect>[10.0, 10.0, 140.0, 18.0]</presentation_rect>
+				<patching_rect>[50.0, 200.0, 150.0, 18.0]</patching_rect>
+			</obj>
+			<obj>
+				<id>obj-4</id>
+				<maxclass>newobj</maxclass>
+				<text>prepend set</text>
+				<patching_rect>[50.0, 150.0, 72.0, 22.0]</patching_rect>
+			</obj>
+			<obj>
+				<id>obj-6</id>
+				<maxclass>newobj</maxclass>
+				<text>sel record stop play undo</text>
+				<patching_rect>[165.5, 150.0, 150.0, 22.0]</patching_rect>
+			</obj>
+			<obj>
+				<id>obj-8</id>
+				<maxclass>newobj</maxclass>
+				<text>live.path live_set</text>
+				<patching_rect>[300.0, 250.0, 95.0, 22.0]</patching_rect>
+			</obj>
+			<obj>
+				<id>obj-9</id>
+				<maxclass>newobj</maxclass>
+				<text>live.object</text>
+				<patching_rect>[165.5, 320.0, 62.0, 22.0]</patching_rect>
+			</obj>
+			<message>
+				<id>obj-10</id>
+				<text>call set_global_record 1</text>
+				<patching_rect>[165.5, 200.0, 131.0, 22.0]</patching_rect>
+			</message>
+			<message>
+				<id>obj-11</id>
+				<text>call stop_playing</text>
+				<patching_rect>[180.0, 230.0, 97.0, 22.0]</patching_rect>
+			</message>
+			<message>
+				<id>obj-13</id>
+				<text>call undo</text>
+				<patching_rect>[210.0, 290.0, 57.0, 22.0]</patching_rect>
+			</message>
+		</boxes>
+		<lines>
+			<patchline>
+				<source>[obj-1, 0]</source>
+				<destination>[obj-2, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-2, 0]</source>
+				<destination>[obj-4, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-2, 1]</source>
+				<destination>[obj-6, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-4, 0]</source>
+				<destination>[obj-3, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-6, 0]</source>
+				<destination>[obj-10, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-6, 1]</source>
+				<destination>[obj-11, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-6, 3]</source>
+				<destination>[obj-13, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-8, 0]</source>
+				<destination>[obj-9, 1]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-10, 0]</source>
+				<destination>[obj-9, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-11, 0]</source>
+				<destination>[obj-9, 0]</destination>
+			</patchline>
+			<patchline>
+				<source>[obj-13, 0]</source>
+				<destination>[obj-9, 0]</destination>
+			</patchline>
+		</lines>
+	</patcher>
+</max7obj>
