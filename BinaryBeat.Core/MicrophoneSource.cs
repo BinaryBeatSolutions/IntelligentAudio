@@ -7,7 +7,7 @@ namespace BinaryBeat.Core;
 
 public class MicrophoneSource : IDisposable
 {
-    private WaveInEvent? _waveIn;
+    private WaveInEvent _waveIn;
     private readonly ChannelWriter<byte[]> _writer;
     private readonly NoiseGateProcessor _gate = new();
 

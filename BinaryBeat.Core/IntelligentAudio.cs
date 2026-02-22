@@ -6,7 +6,7 @@ namespace BinaryBeat.Core;
 public class IntelligentAudio : IDisposable
 {
     private readonly ChannelReader<byte[]> _audioReader;
-    private WhisperFactory? _factory;
+    private WhisperFactory _factory;
 
     Action<string> P = input =>
     {
@@ -27,7 +27,7 @@ public class IntelligentAudio : IDisposable
 
         _factory = WhisperFactory.FromPath(path);
 
-        Console.WriteLine($"{opt.ModelName} {path} {_factory}");
+        Console.WriteLine($"{opt.ModelName}\n {_factory}\n {path}");
 
         // Vi samlar ljudet i en lista tills vi har tillräckligt för Whisper
         var audioBuffer = new List<byte>();
@@ -60,7 +60,7 @@ public class IntelligentAudio : IDisposable
                     {
                         try
                         {
-                            var text = await ProcessWithWhisperAsync(chunkToProcess, opt);
+                            var text = await ProcessWithWhisperAsync(chunkToProcess);
                             if (!string.IsNullOrWhiteSpace(text))
                             {
                                 P($"[Whisper] {text.Trim()}");
@@ -81,31 +81,54 @@ public class IntelligentAudio : IDisposable
     }
 
 
-    private async Task<string> ProcessWithWhisperAsync(byte[] raw441Bytes, Options opt)
+    private async Task<string> ProcessWithWhisperAsync(byte[] raw441Bytes)
     {
-        // 1. Konvertera 16-bit Integer till 32-bit Float
-        var samples = new float[raw441Bytes.Length / 2];
-        for (int i = 0; i < samples.Length; i++)
+        // 1. Konvertera 16-bit bytes till float-samples (-1.0 till 1.0)
+        // Whisper kräver 32-bit float för sin interna matematik
+        var samples441 = new float[raw441Bytes.Length / 2];
+        for (int i = 0; i < samples441.Length; i++)
         {
             short s = BitConverter.ToInt16(raw441Bytes, i * 2);
-            samples[i] = s / 32768f;
+            samples441[i] = s / 32768f;
         }
 
-        // 2. Downsampling: 44100 -> 16000
-        float[] samples16k = AudioAnalysis.Resample(samples, 44100, 16000);
+        // 2. RESAMPLING (44100 -> 16000)
+        // Utan detta hör Whisper "Musse Pigg", med detta hör den din iD14 i hi-fi!
+        float[] samples16k = AudioAnalysis.Resample(samples441, 44100, 16000);
 
-        // 3. Whisper.net processering
+        // 3. Whisper.net Processering
         using var processor = _factory.CreateBuilder()
             .WithLanguage("en")
-            .WithPrompt("C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B Major Minor Maj7 Min7 Dom7 Sus4 Diminished Augmented Chord")
+            .WithPrompt("Musical chords: C, C#, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B. Major, Minor, Maj7, m7, Dominant, Sus4, Diminished.")
             .Build();
-       
-        var fullText = new StringBuilder();
+
+        var result = new StringBuilder();
         await foreach (var segment in processor.ProcessAsync(samples16k))
         {
-            fullText.Append(segment.Text);
+
+            var rawText = segment.Text.ToString().Trim();
+            if (string.IsNullOrEmpty(rawText)) return "";
+
+            // 1. Dela upp strängen (Whisper kan ge "C Major" eller "C, Major")
+            var parts = rawText.Split(new[] { ' ', ',', '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string root = parts.FirstOrDefault() ?? "C";
+            // Försök hitta kvaliteten (t.ex. "minor"), annars defaulta till "major"
+
+            string quality = parts.Length > 1 ? parts[1].Replace(".", "").Trim() : "major";
+
+            // 2. Skapa MIDI-noterna!
+            int[] midiNotes = ChordFactory.Create(root, quality, 1.0f);
+
+            if (midiNotes.Length > 0)
+            {
+                P($"[BinaryBeat] MIDI skapad för {root} {quality}: {string.Join(", ", midiNotes)}");
+                // HÄR skickar vi noterna till DryWetMidi (nästa steg)
+            }
+            result.Append(segment.Text);
         }
-        return fullText.ToString();
+
+        return result.ToString().Trim();
     }
 
     /// <summary>

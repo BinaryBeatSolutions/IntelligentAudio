@@ -10,41 +10,29 @@ namespace BinaryBeat.Core;
 
 public static class PathResolver
 {
+
     /// <summary>
     /// AI Model path
     /// </summary>
     /// <param name="opt"></param>
     /// <returns></returns>
-    public static async Task<string> GetModelPath(string model)
+    public static async Task<string> GetModelPath(string modelName)
     {
-        // AppContext.BaseDirectory is more secure for Native AOT and VST-plugins
-        string baseDir = AppContext.BaseDirectory;
+        var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models");
+        Directory.CreateDirectory(folder); // Skapar mappen om den saknas
 
-        // Debug (Visual Studio), back up to projectroot to keep everything simple and close.
-#if DEBUG
-        string projectRoot = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\")); //Microsoft!!! Still after all these years.
-        string path = Path.Combine(projectRoot, "Models", model);
-#else
-        string path = Path.Combine(baseDir, "Models", model);
-#endif
+        var path = Path.Combine(folder, modelName);
 
-        //Download model if not exists.
         if (!File.Exists(path))
         {
-            Console.WriteLine($"[BinaryBeat] Downloading Model to '{path}'.");
-            var directory = Path.GetDirectoryName(path);
-            if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
+            Console.WriteLine($"[BinaryBeat] Laddar ner {modelName} via GgmlDownloader...");
 
+            // Vi mappar GgmlType.TinyEn (kan automatiseras senare baserat på modelName)
             using var modelStream = await WhisperGgmlDownloader.Default.GetGgmlModelAsync(GgmlType.TinyEn);
-            using var fileStream = File.OpenWrite(path);
-            await modelStream.CopyToAsync(fileStream);
-#if DEBUG
-            Console.WriteLine($"[BinaryBeat] Download Model to '{Path.GetFileName(path)}' completed.");
-#endif
-        }
-        else
-        {
-            Console.WriteLine($"[BinaryBeat] Using Model {model}");
+            using var fileWriter = File.Create(path); // File.Create rensar ev. korrupta rester
+            await modelStream.CopyToAsync(fileWriter);
+
+            Console.WriteLine("[BinaryBeat] Nedladdning slutförd.");
         }
 
         return path;
