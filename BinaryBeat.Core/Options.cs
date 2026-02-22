@@ -9,7 +9,7 @@ public class Options
     /// AI Model used in app
     /// </summary>
     [Option('m', "modelFile", Required = false, HelpText = "Model to use (filename", Default = "ggml-tiny.en.bin")]
-    public string ModelName { get; set; } = "ggml-tiny.en.bin";
+    public string ModelName { get; set; } = "ggml-tiny.bin"; // If default is set in Option, this parameter is not overriden???
 
     [Option('w', "message", Required = false, HelpText = "")]
     public string WelcomeMessage { get; set; } = "BinaryBeat Audio Started";

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Whisper.net;
 using Whisper.net.Ggml;
 
 namespace BinaryBeat.Core;
@@ -16,7 +17,6 @@ public static class PathResolver
     /// <returns></returns>
     public static async Task<string> GetModelPath(string model)
     {
-      
         // AppContext.BaseDirectory is more secure for Native AOT and VST-plugins
         string baseDir = AppContext.BaseDirectory;
 
@@ -35,11 +35,11 @@ public static class PathResolver
             var directory = Path.GetDirectoryName(path);
             if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
 
-            using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(GgmlType.Base);
+            using var modelStream = await WhisperGgmlDownloader.Default.GetGgmlModelAsync(GgmlType.TinyEn);
             using var fileStream = File.OpenWrite(path);
             await modelStream.CopyToAsync(fileStream);
 #if DEBUG
-            Console.WriteLine($"[BinaryBeat] Download Model to '{path}' completed.");
+            Console.WriteLine($"[BinaryBeat] Download Model to '{Path.GetFileName(path)}' completed.");
 #endif
         }
         else

@@ -25,9 +25,7 @@ public class IntelligentAudio : IDisposable
     {
         var path = await PathResolver.GetModelPath(opt.ModelName);
 
-
-
-        _factory ??= WhisperFactory.FromPath(path);
+        _factory = WhisperFactory.FromPath(path);
 
         Console.WriteLine($"{opt.ModelName} {path} {_factory}");
 
@@ -49,11 +47,13 @@ public class IntelligentAudio : IDisposable
                 // 2. Har vi samlat tillräckligt med ljud (t.ex. 2 sekunder)?
                 if (audioBuffer.Count >= threshold)
                 {
+                    P($"{audioBuffer.Count}");
+
                     // Kopiera ut datan till en lokal variabel för analys
                     var chunkToProcess = audioBuffer.ToArray();
                     audioBuffer.Clear(); // Töm huvudbufferten direkt så vi kan samla nästa 2 sekunder
 
-                    // 3. RUN AND FORGET (Task.Run)
+                    // 3. FIRE AND FORGET (Task.Run)
                     // Vi kör Whisper i en egen tråd så att foreach-loopen kan gå tillbaka 
                     // och hämta nästa ljudpaket från iD14 omedelbart!
                     _ = Task.Run(async () =>
@@ -68,7 +68,7 @@ public class IntelligentAudio : IDisposable
                         }
                         catch (Exception ex)
                         {
-                            P($"Fel vid Whisper-analys: {ex.Message}");
+                            P($"[ERROR]: {ex}, {ex.StackTrace}");
                         }
                     }, ct);
                 }
@@ -76,7 +76,7 @@ public class IntelligentAudio : IDisposable
         }
         catch (OperationCanceledException)
         {
-            P("Whisper-lyssning avbruten snyggt.");
+            P("Upptagning avbruten normalt.");
         }
     }
 
@@ -93,12 +93,11 @@ public class IntelligentAudio : IDisposable
 
         // 2. Downsampling: 44100 -> 16000
         float[] samples16k = AudioAnalysis.Resample(samples, 44100, 16000);
-       
 
         // 3. Whisper.net processering
-        using var processor = _factory?.CreateBuilder()
+        using var processor = _factory.CreateBuilder()
             .WithLanguage("en")
-            .WithPrompt(opt.AIPromt)
+            .WithPrompt("C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B Major Minor Maj7 Min7 Dom7 Sus4 Diminished Augmented Chord")
             .Build();
        
         var fullText = new StringBuilder();

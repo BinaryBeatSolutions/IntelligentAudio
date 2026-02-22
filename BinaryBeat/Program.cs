@@ -2,7 +2,7 @@
 var audioChannel = Channel.CreateUnbounded<byte[]>();
 
 var serviceProvider = new ServiceCollection()
-    .AddSingleton(audioChannel) // Lägg till denna rad!
+    .AddSingleton(audioChannel) 
     .AddSingleton(audioChannel.Writer)
     .AddSingleton(audioChannel.Reader)
     .AddSingleton<MicrophoneSource>()
