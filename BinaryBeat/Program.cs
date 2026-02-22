@@ -7,6 +7,7 @@ var serviceProvider = new ServiceCollection()
     .AddSingleton(audioChannel.Reader)
     .AddSingleton<MicrophoneSource>()
     .AddSingleton<IntelligentAudio>()
+    .AddSingleton<MidiOutputService>()
     .BuildServiceProvider();
 
 await Parser.Default
@@ -18,6 +19,7 @@ async Task AudioEngineAsync(Options opt)
     using var cts = new CancellationTokenSource();
 
     var mic = serviceProvider.GetRequiredService<MicrophoneSource>();
+    var midi = serviceProvider.GetRequiredService<MidiOutputService>();
     var engine = serviceProvider.GetRequiredService<IntelligentAudio>(); 
 
     // 1. Starta mikrofonen (Producenten)

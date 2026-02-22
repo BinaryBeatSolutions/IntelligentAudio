@@ -11,6 +11,7 @@
 		<PackageReference Include="Whisper.net" Version="1.9.0" />
 		<PackageReference Include="Whisper.net.AllRuntimes" Version="1.9.0" />
 		<PackageReference Include="NAudio" Version="2.2.1" />
+		<PackageReference Include="Melanchall.DryWetMidi" Version="8.0.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="CommandLine" />

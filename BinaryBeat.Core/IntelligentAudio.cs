@@ -1,4 +1,5 @@
-﻿using Whisper.net;
+﻿using Melanchall.DryWetMidi.MusicTheory;
+using Whisper.net;
 using Whisper.net.Ggml;
 
 namespace BinaryBeat.Core;
@@ -6,6 +7,7 @@ namespace BinaryBeat.Core;
 public class IntelligentAudio : IDisposable
 {
     private readonly ChannelReader<byte[]> _audioReader;
+    private readonly MidiOutputService _midiService;
     private WhisperFactory _factory;
 
     Action<string> P = input =>
@@ -16,9 +18,10 @@ public class IntelligentAudio : IDisposable
         #endif
     };
 
-    public IntelligentAudio(ChannelReader<byte[]> audioReader)
+    public IntelligentAudio(ChannelReader<byte[]> audioReader, MidiOutputService midiService)
     {
         _audioReader = audioReader;
+        _midiService = midiService;
     }
 
     public async Task StartListenAsync(Options opt, CancellationToken ct)
@@ -26,8 +29,6 @@ public class IntelligentAudio : IDisposable
         var path = await PathResolver.GetModelPath(opt.ModelName);
 
         _factory = WhisperFactory.FromPath(path);
-
-        Console.WriteLine($"{opt.ModelName}\n {_factory}\n {path}");
 
         // Vi samlar ljudet i en lista tills vi har tillräckligt för Whisper
         var audioBuffer = new List<byte>();
@@ -47,8 +48,6 @@ public class IntelligentAudio : IDisposable
                 // 2. Har vi samlat tillräckligt med ljud (t.ex. 2 sekunder)?
                 if (audioBuffer.Count >= threshold)
                 {
-                    P($"{audioBuffer.Count}");
-
                     // Kopiera ut datan till en lokal variabel för analys
                     var chunkToProcess = audioBuffer.ToArray();
                     audioBuffer.Clear(); // Töm huvudbufferten direkt så vi kan samla nästa 2 sekunder
@@ -105,7 +104,6 @@ public class IntelligentAudio : IDisposable
         var result = new StringBuilder();
         await foreach (var segment in processor.ProcessAsync(samples16k))
         {
-
             var rawText = segment.Text.ToString().Trim();
             if (string.IsNullOrEmpty(rawText)) return "";
 
@@ -124,6 +122,9 @@ public class IntelligentAudio : IDisposable
             {
                 P($"[BinaryBeat] MIDI skapad för {root} {quality}: {string.Join(", ", midiNotes)}");
                 // HÄR skickar vi noterna till DryWetMidi (nästa steg)
+
+                _midiService.PlayChord(midiNotes); // NU händer det!
+
             }
             result.Append(segment.Text);
         }
