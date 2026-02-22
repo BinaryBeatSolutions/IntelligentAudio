@@ -18,10 +18,18 @@ public static class PathResolver
     /// <returns></returns>
     public static async Task<string> GetModelPath(string modelName)
     {
-        var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models");
-        Directory.CreateDirectory(folder); // Skapar mappen om den saknas
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var folder = Path.Combine(appData, "BinaryBeat", "Models");
+
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
 
         var path = Path.Combine(folder, modelName);
+
+        Console.WriteLine($"{path}");
 
         if (!File.Exists(path))
         {

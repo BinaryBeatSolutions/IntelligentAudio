@@ -10,15 +10,19 @@ SolidCompression=yes
 PrivilegesRequired=admin
 
 [Files]
-; C# Motorn och DLL-filer (peka på din Release-mapp)
+; Skicka bara med själva programmet och dess drivrutiner/DLL:er
 Source: "D:\Projects\BinaryBeat\bin\Release\net8.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
+; Ableton-enheten
+Source: "D:\Projects\BinaryBeat.Audio\Ableton\BinaryBeat.amxd"; DestDir: "{userdocs}\Ableton\User Library\Presets\Audio Effects\Max Audio Effect"; Flags: ignoreversion
+
+
 ; Whisper-modellen
-Source: "D:\Projects\BinaryBeat\Models\ggml-tiny.en.bin"; DestDir: "{app}\Models"; Flags: ignoreversion
+Source: "D:\Projects\BinaryBeat.Audio\BinaryBeat\bin\Release\net8.0\Models\ggml-tiny.en.bin"; DestDir: "{app}\Models"; Flags: ignoreversion
 
 ; Max for Live-enheten (Ableton User Library)
 ; Vi placerar den där Ableton letar efter egna enheter
-Source: "D:\Projects\BinaryBeat\BinaryBeat.Ableton\BinaryBeat.amxd"; DestDir: "{userdocs}\Ableton\User Library\Presets\Audio Effects\Max Audio Effect"; Flags: ignoreversion
+Source: "D:\Projects\BinaryBeat.Audio\Ableton\BinaryBeat.amxd"; DestDir: "{userdocs}\Ableton\User Library\Presets\Audio Effects\Max Audio Effect"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\BinaryBeat"; Filename: "{app}\BinaryBeat.exe"

@@ -1,4 +1,6 @@
 ﻿
+
+
 var audioChannel = Channel.CreateUnbounded<byte[]>();
 
 var serviceProvider = new ServiceCollection()
@@ -17,6 +19,13 @@ await Parser.Default
 
 async Task AudioEngineAsync(Options opt)
 {
+    // Kolla om BinaryBeat redan körs
+    //string procName = Process.GetCurrentProcess().ProcessName;
+    //if (Process.GetProcessesByName(procName).Length > 1)
+    //{
+    //    return; // Avsluta tyst om den redan är igång
+    //}
+
     using var cts = new CancellationTokenSource();
 
     var mic = serviceProvider.GetRequiredService<MicrophoneSource>();
