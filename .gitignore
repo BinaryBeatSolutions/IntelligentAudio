@@ -7,6 +7,8 @@
 .git
 *.bin
 
+[Mm]odels/*.bin
+
 BinaryBeat/Models/*.bin
 BinaryBeat/bin
 BinaryBeat/obj
