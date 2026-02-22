@@ -7,11 +7,11 @@ into actionable MIDI data and DAW control commands with surgical precision.
 
 ## 🚀 Key Features
 
-    **AI-Driven Chord Recognition:** Utilizes Whisper.net to interpret spoken or played musical terms (e.g., "A Minor", "C# Maj7") with high contextual awareness.
-    **Pro Audio Signal Chain:** Optimized for Audient iD14 with 44.1kHz capture, real-time 16kHz resampling, and DC-blocking high-pass filters.
-    **Intelligent Noise Gate:** RMS-based gating with Hysteresis and Hold-time logic to eliminate background hiss while ensuring musical tails are preserved for AI analysis.
-    **Asynchronous Producer-Consumer Pipeline:** Powered by System.Threading.Channels to decouple audio capture from heavy AI inference, ensuring zero-drop reliability.
-    **Musical MIDI Mapping:** Seamlessly converts interpreted text into MIDI note arrays via a logic-based ChordFactory.
+     AI-Driven Chord Recognition: Utilizes Whisper.net to interpret spoken or played musical terms (e.g., "A Minor", "C# Maj7") with high contextual awareness.
+     Pro Audio Signal Chain: Optimized for Audient iD14 with 44.1kHz capture, real-time 16kHz resampling, and DC-blocking high-pass filters.
+     Intelligent Noise Gate: RMS-based gating with Hysteresis and Hold-time logic to eliminate background hiss while ensuring musical tails are preserved for AI analysis.
+     Asynchronous Producer-Consumer Pipeline: Powered by System.Threading.Channels to decouple audio capture from heavy AI inference, ensuring zero-drop reliability.
+     Musical MIDI Mapping: Seamlessly converts interpreted text into MIDI note arrays via a logic-based ChordFactory.
 
 ## 🛠 Technical Stack
 
@@ -23,8 +23,9 @@ into actionable MIDI data and DAW control commands with surgical precision.
 
 ## 📦 Installation & Setup
 
-    *A complete installer is on it's way. More information will be published shortly.
+    *) A complete installer is on it's way. More information will be published shortly.
 
+    If you want to discover the code and use it locally, use:
     Clone the repository:
     bash:> git clone https://github.com/BinaryBeatSolutions/IntelligentAudio.git
 

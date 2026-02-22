@@ -5,16 +5,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
-    <PackageReference Include="NAudio" Version="2.2.1" />
-    <PackageReference Include="Whisper.net" Version="1.9.0" />
-    <PackageReference Include="Whisper.net.AllRuntimes" Version="1.9.0" />
+	  <PackageReference Include="CommandLineParser" Version="2.9.1" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
+	  <PackageReference Include="NAudio" Version="2.2.1" />
+	  <PackageReference Include="Whisper.net" Version="1.9.0" />
+	  <PackageReference Include="Whisper.net.AllRuntimes" Version="1.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +22,254 @@
 	
 	<ItemGroup>
 		<Using Include="CommandLine" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-x64\libggml-base-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-arm64\libggml-base-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-x64\libggml-base-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libggml-base-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-x64\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm64\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.vulkan\1.9.0\build\linux-x64\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.openvino\1.9.0\build\linux-x64\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.noavx\1.9.0\build\linux-x64\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.cuda.linux\1.9.0\build\linux-x64\libggml-base-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-x64\libggml-blas-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-arm64\libggml-blas-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-x64\libggml-blas-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libggml-blas-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-x64\libggml-cpu-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-arm64\libggml-cpu-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-x64\libggml-cpu-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libggml-cpu-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-x64\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm64\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.vulkan\1.9.0\build\linux-x64\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.openvino\1.9.0\build\linux-x64\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.noavx\1.9.0\build\linux-x64\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.cuda.linux\1.9.0\build\linux-x64\libggml-cpu-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.cuda.linux\1.9.0\build\linux-x64\libggml-cuda-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-arm64\libggml-metal-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libggml-metal-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.vulkan\1.9.0\build\linux-x64\libggml-vulkan-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-x64\libggml-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-arm64\libggml-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-x64\libggml-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libggml-whisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-x64\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm64\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.vulkan\1.9.0\build\linux-x64\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.openvino\1.9.0\build\linux-x64\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.noavx\1.9.0\build\linux-x64\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.cuda.linux\1.9.0\build\linux-x64\libggml-whisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-x64\libwhisper.coreml.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libwhisper.coreml.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-x64\libwhisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\macos-arm64\libwhisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-x64\libwhisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.coreml\1.9.0\build\macos-arm64\libwhisper.dylib" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-x64\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\linux-arm64\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.vulkan\1.9.0\build\linux-x64\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.openvino\1.9.0\build\linux-x64\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.noavx\1.9.0\build\linux-x64\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.cuda.linux\1.9.0\build\linux-x64\libwhisper.so" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\win-x86\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\win-x64\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime\1.9.0\build\win-arm64\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.vulkan\1.9.0\build\win-x64\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.openvino\1.9.0\build\win-x64\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.noavx\1.9.0\build\win-x86\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.noavx\1.9.0\build\win-x64\whisper.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="C:\Users\GREENCOM\.nuget\packages\whisper.net.runtime.cuda.windows\1.9.0\build\win-x64\whisper.dll" />
 	</ItemGroup>
 
 </Project>

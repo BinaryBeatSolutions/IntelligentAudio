@@ -1,49 +1,56 @@
 ﻿
 
-
-var audioChannel = Channel.CreateUnbounded<byte[]>();
-
-var serviceProvider = new ServiceCollection()
-    .AddSingleton(audioChannel) 
-    .AddSingleton(audioChannel.Writer)
-    .AddSingleton(audioChannel.Reader)
-    .AddSingleton<MicrophoneSource>()
-    .AddSingleton<IntelligentAudio>()
-    .AddSingleton<MidiOutputService>()
-    .AddSingleton<OscService>()
-    .BuildServiceProvider();
-
 await Parser.Default
     .ParseArguments<Options>(args)
     .WithParsedAsync(AudioEngineAsync);
 
+
 async Task AudioEngineAsync(Options opt)
 {
-    // Kolla om BinaryBeat redan körs
-    //string procName = Process.GetCurrentProcess().ProcessName;
-    //if (Process.GetProcessesByName(procName).Length > 1)
-    //{
-    //    return; // Avsluta tyst om den redan är igång
-    //}
+    var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BinaryBeat", "startup_log.txt");
+    File.AppendAllText(logPath, $"[{DateTime.Now}] Start attempt from: {AppDomain.CurrentDomain.BaseDirectory}\n");
+
+    var audioChannel = Channel.CreateUnbounded<byte[]>();
+    string procName = Process.GetCurrentProcess().ProcessName;
+    if (Process.GetProcessesByName(procName).Length > 1) return;
+
+    // 2. NU bygger vi tjänsterna
+    var services = new ServiceCollection()
+        .AddSingleton(audioChannel.Reader) // Rekommenderar att bara använda Reader i IntelligentAudio
+        .AddSingleton(audioChannel.Writer)
+        .AddSingleton<MicrophoneSource>()
+        .AddSingleton<MidiOutputService>()
+        .AddSingleton<OscService>()
+        .AddSingleton(opt)
+        .AddSingleton<IntelligentAudio>();
 
     using var cts = new CancellationTokenSource();
 
-    var mic = serviceProvider.GetRequiredService<MicrophoneSource>();
-    var midi = serviceProvider.GetRequiredService<MidiOutputService>();
-    var engine = serviceProvider.GetRequiredService<IntelligentAudio>(); 
+    try
+    {
+        var serviceProvider = services.BuildServiceProvider();
+        var mic = serviceProvider.GetRequiredService<MicrophoneSource>();
+        var midi = serviceProvider.GetRequiredService<MidiOutputService>();
+        var engine = serviceProvider.GetRequiredService<IntelligentAudio>(); 
 
-    // 1. Starta mikrofonen (Producenten)
-    // Den börjar lyssna på iD14 och skicka "tvättad" data till kanalen
-    mic?.Start(deviceNumber: 0);
+        // 1. Starta mikrofonen (Producenten)
+        // Den börjar lyssna på iD14 och skicka "tvättad" data till kanalen
+        mic?.Start(deviceNumber: 0);
 
-    // 2. Starta AI-motorn (Konsumenten)
-    // Denna loop körs så länge det finns data i kanalen
-    var analysisTask = engine?.StartListenAsync(opt, cts.Token);
+        // Denna loop körs så länge det finns data i kanalen
+        var analysisTask = engine?.StartListenAsync(opt, cts.Token);
 
-    P("Systemet lyssnar. Säg ett ackord...");
+        P("System started");
+        File.AppendAllText(logPath, $"[{DateTime.Now}] Start attempt from: {AppDomain.CurrentDomain.BaseDirectory}\n");
+        // Vänta på att analysen blir klar (eller att användaren avbryter)
+        await analysisTask;
 
-    // Vänta på att analysen blir klar (eller att användaren avbryter)
-    await analysisTask;
-
-    mic?.Stop();
+        mic?.Stop();
+    }
+    catch (Exception ex)
+    {
+        // AppData log!
+        var errPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BinaryBeat", "error.txt");
+        File.WriteAllText(errPath, ex.ToString());
+    }
 }
