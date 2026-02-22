@@ -8,6 +8,7 @@ var serviceProvider = new ServiceCollection()
     .AddSingleton<MicrophoneSource>()
     .AddSingleton<IntelligentAudio>()
     .AddSingleton<MidiOutputService>()
+    .AddSingleton<OscService>()
     .BuildServiceProvider();
 
 await Parser.Default

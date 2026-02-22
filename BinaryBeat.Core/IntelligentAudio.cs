@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.MusicTheory;
+using NAudio.Utils;
 using Whisper.net;
 using Whisper.net.Ggml;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BinaryBeat.Core;
 
@@ -8,6 +10,7 @@ public class IntelligentAudio : IDisposable
 {
     private readonly ChannelReader<byte[]> _audioReader;
     private readonly MidiOutputService _midiService;
+    private readonly OscService _oscService;
     private WhisperFactory _factory;
 
     Action<string> P = input =>
@@ -18,10 +21,11 @@ public class IntelligentAudio : IDisposable
         #endif
     };
 
-    public IntelligentAudio(ChannelReader<byte[]> audioReader, MidiOutputService midiService)
+    public IntelligentAudio(ChannelReader<byte[]> audioReader, MidiOutputService midiService, OscService oscService)
     {
         _audioReader = audioReader;
         _midiService = midiService;
+       _oscService = oscService;
     }
 
     public async Task StartListenAsync(Options opt, CancellationToken ct)
@@ -79,58 +83,60 @@ public class IntelligentAudio : IDisposable
         }
     }
 
-
     private async Task<string> ProcessWithWhisperAsync(byte[] raw441Bytes)
     {
-        // 1. Konvertera 16-bit bytes till float-samples (-1.0 till 1.0)
-        // Whisper kräver 32-bit float för sin interna matematik
+        // 1. Konvertera och Resampla (Dina steg 1 & 2 är perfekta!)
         var samples441 = new float[raw441Bytes.Length / 2];
         for (int i = 0; i < samples441.Length; i++)
         {
             short s = BitConverter.ToInt16(raw441Bytes, i * 2);
             samples441[i] = s / 32768f;
         }
-
-        // 2. RESAMPLING (44100 -> 16000)
-        // Utan detta hör Whisper "Musse Pigg", med detta hör den din iD14 i hi-fi!
         float[] samples16k = AudioAnalysis.Resample(samples441, 44100, 16000);
 
-        // 3. Whisper.net Processering
+        // 3. Whisper Processering
         using var processor = _factory.CreateBuilder()
             .WithLanguage("en")
             .WithPrompt("Musical chords: C, C#, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B. Major, Minor, Maj7, m7, Dominant, Sus4, Diminished.")
             .Build();
 
-        var result = new StringBuilder();
+        var fullTextBuilder = new StringBuilder();
+
+        // Samla ihop ALL text först
         await foreach (var segment in processor.ProcessAsync(samples16k))
         {
-            var rawText = segment.Text.ToString().Trim();
-            if (string.IsNullOrEmpty(rawText)) return "";
-
-            // 1. Dela upp strängen (Whisper kan ge "C Major" eller "C, Major")
-            var parts = rawText.Split(new[] { ' ', ',', '-' }, StringSplitOptions.RemoveEmptyEntries);
-
-            string root = parts.FirstOrDefault() ?? "C";
-            // Försök hitta kvaliteten (t.ex. "minor"), annars defaulta till "major"
-
-            string quality = parts.Length > 1 ? parts[1].Replace(".", "").Trim() : "major";
-
-            // 2. Skapa MIDI-noterna!
-            int[] midiNotes = ChordFactory.Create(root, quality, 1.0f);
-
-            if (midiNotes.Length > 0)
-            {
-                P($"[BinaryBeat] MIDI skapad för {root} {quality}: {string.Join(", ", midiNotes)}");
-                // HÄR skickar vi noterna till DryWetMidi (nästa steg)
-
-                _midiService.PlayChord(midiNotes); // NU händer det!
-
-            }
-            result.Append(segment.Text);
+            fullTextBuilder.Append(segment.Text);
         }
 
-        return result.ToString().Trim();
+        var finalResult = fullTextBuilder.ToString().Trim();
+        if (string.IsNullOrEmpty(finalResult)) return "";
+
+        // --- NU TOLKAR VI RESULTATET ---
+
+        // Dela upp strängen (t.ex. "A, Minor.")
+        var parts = finalResult.Split(new[] { ' ', ',', '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+        string root = parts.FirstOrDefault() ?? "C";
+        // Ta bort punkter och gör rent quality-strängen
+        string quality = parts.Length > 1 ? parts[1].Replace(".", "").Trim() : "major";
+
+        // Skapa MIDI-noter
+        int[] midiNotes = ChordFactory.Create(root, quality, 1.0f);
+
+        if (midiNotes.Length > 0)
+        {
+            P($"[BinaryBeat] MIDI skapad för {root} {quality}: {string.Join(", ", midiNotes)}");
+
+            // Skicka till MIDI
+            _midiService.PlayChord(midiNotes);
+
+            // Skicka till Max for Live (OSC)
+            _oscService.SendChord($"{root} {quality}");
+        }
+
+        return finalResult;
     }
+
 
     /// <summary>
     /// Dispose components to free up resources. WhisperFactory och WhisperProcessor kan använda mycket GPU/CPU-resurser, så det är viktigt att städa upp ordentligt.
