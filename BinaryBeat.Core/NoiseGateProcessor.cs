@@ -1,6 +1,8 @@
 ﻿namespace BinaryBeat.Core;
 
-
+/// <summary>
+/// NoiseGate
+/// </summary>
 public class NoiseGateProcessor
 {
     private readonly SimpleHighPass _highPass = new(); // Vårt nya filter
@@ -8,6 +10,14 @@ public class NoiseGateProcessor
     private readonly TimeSpan _holdTime = TimeSpan.FromMilliseconds(400);
     private readonly double _threshold = 400;
 
+    /// <summary>
+    /// Process the data.
+    /// Closes the stream if the volume is to low.
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="bytesRecorded"></param>
+    /// <param name="writer"></param>
+    /// <returns></returns>
     public async Task ProcessBufferAsync(byte[] buffer, int bytesRecorded, ChannelWriter<byte[]> writer)
     {
         // 1. Skapa kopian (viktigt för trådsäkerhet)

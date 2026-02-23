@@ -26,21 +26,22 @@ public static class PathResolver
             Directory.CreateDirectory(folder);
         }
 
-
         var path = Path.Combine(folder, modelName);
-
+#if DEBUG
         Console.WriteLine($"{path}");
-
+#endif
         if (!File.Exists(path))
         {
+            #if DEBUG
             Console.WriteLine($"[BinaryBeat] Laddar ner {modelName} via GgmlDownloader...");
-
+#endif
             // Vi mappar GgmlType.TinyEn (kan automatiseras senare baserat på modelName)
             using var modelStream = await WhisperGgmlDownloader.Default.GetGgmlModelAsync(GgmlType.TinyEn);
             using var fileWriter = File.Create(path); // File.Create rensar ev. korrupta rester
             await modelStream.CopyToAsync(fileWriter);
-
+#if DEBUG
             Console.WriteLine("[BinaryBeat] Nedladdning slutförd.");
+#endif
         }
 
         return path;

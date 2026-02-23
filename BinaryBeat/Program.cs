@@ -1,9 +1,7 @@
 ﻿
-
 await Parser.Default
     .ParseArguments<Options>(args)
     .WithParsedAsync(AudioEngineAsync);
-
 
 async Task AudioEngineAsync(Options opt)
 {
@@ -12,6 +10,8 @@ async Task AudioEngineAsync(Options opt)
 
     var audioChannel = Channel.CreateUnbounded<byte[]>();
     string procName = Process.GetCurrentProcess().ProcessName;
+
+    //Only run one(1) instance of the service
     if (Process.GetProcessesByName(procName).Length > 1) return;
 
     // Services
@@ -24,25 +24,27 @@ async Task AudioEngineAsync(Options opt)
         .AddSingleton(opt)
         .AddSingleton<IntelligentAudio>();
 
-    using var cts = new CancellationTokenSource();
-
     try
     {
+        using var cts = new CancellationTokenSource();
+
         var serviceProvider = services.BuildServiceProvider();
         var mic = serviceProvider.GetRequiredService<MicrophoneSource>();
         var midi = serviceProvider.GetRequiredService<MidiOutputService>();
-        var engine = serviceProvider.GetRequiredService<IntelligentAudio>(); 
+        var engine = serviceProvider.GetRequiredService<IntelligentAudio>();
+        var osc = serviceProvider.GetRequiredService<OscService>();
 
         // Start microphone
-        // Washed audio 
+        // Wash audio with Gate and a highpass filter
         mic?.Start(deviceNumber: 0);
 
         //Listen for audio
         var analysisTask = engine?.StartListenAsync(opt, cts.Token);
 
         P("System started");
+#if DEBUG
         File.AppendAllText(logPath, $"[{DateTime.Now}] Start attempt from: {AppDomain.CurrentDomain.BaseDirectory}\n");
-      
+#endif
         await analysisTask;
 
         mic?.Stop();

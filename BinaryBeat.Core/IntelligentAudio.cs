@@ -39,7 +39,7 @@ public class IntelligentAudio : IDisposable
     }
 
     /// <summary>
-    /// Start listen to the microphone
+    /// Process data from microphone
     /// </summary>
     /// <param name="opt">Options</param>
     /// <param name="ct">CansellationToken</param>
@@ -99,6 +99,11 @@ public class IntelligentAudio : IDisposable
         }
     }
 
+    /// <summary>
+    /// Starts the AI engine
+    /// </summary>
+    /// <param name="raw441Bytes"></param>
+    /// <returns></returns>
     private async Task<string> ProcessWithWhisperAsync(byte[] raw441Bytes)
     {
         // 1. Konvertera och Resampla (steg 1 & 2 är perfekta!)

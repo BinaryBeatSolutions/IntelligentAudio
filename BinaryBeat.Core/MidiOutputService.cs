@@ -5,6 +5,9 @@ using Melanchall.DryWetMidi.Multimedia;
 
 namespace BinaryBeat.Core;
 
+/// <summary>
+/// Midi 
+/// </summary>
 public class MidiOutputService : IDisposable
 {
     private OutputDevice? _outputDevice;
@@ -13,7 +16,9 @@ public class MidiOutputService : IDisposable
     {
         // Öppna en virtuell MIDI-port (kräver loopMIDI installerat)
         _outputDevice = OutputDevice.GetByName(deviceName);
+#if DEBUG
         Console.WriteLine($"[MIDI] Ansluten till: {deviceName}");
+#endif
     }
 
     public void PlayChord(int[] notes, int velocity = 90)
@@ -24,10 +29,11 @@ public class MidiOutputService : IDisposable
         {
             // Skicka Note On för varje ton i ackordet
             _outputDevice.SendEvent(new NoteOnEvent((SevenBitNumber)noteNumber, (SevenBitNumber)velocity));
+#if DEBUG
             Console.Write($"{noteNumber} ");
+#endif
         }
-        Console.WriteLine();
-
+        
         // Stoppa noterna efter 2 sekunder (eller låt dem ringa)
         _ = Task.Delay(2000).ContinueWith(_ => StopChord(notes));
     }

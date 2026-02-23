@@ -42,11 +42,11 @@ into actionable MIDI data and DAW control commands with surgical precision. With
 
 ### 🎹 Internal Architecture
 
-    Capture: MicrophoneSource captures 16-bit PCM data from the iD14.
-    Processing: A High-pass filter removes low-end rumble, followed by an RMS calculation to determine if the signal exceeds the Threshold.
-    Queueing: Valid audio buffers are pushed into an unbounded Channel<byte[]>.
-    Inference: IntelligentAudio consumes the channel, accumulates buffers, and executes Whisper AI inference using a musical Prompt to force-focus on chord terminology.
-    Output: The string "A Minor" is mapped to MIDI notes 69, 72, 76 (A, C, E) and dispatched.
+        Capture: MicrophoneSource captures 16-bit PCM data from the iD14.
+        Processing: A High-pass filter removes low-end rumble, followed by an RMS calculation to determine if the signal exceeds the Threshold.
+        Queueing: Valid audio buffers are pushed into an unbounded Channel<byte[]>.
+        Inference: IntelligentAudio consumes the channel, accumulates buffers, and executes Whisper AI inference using a musical Prompt to force-focus on chord terminology.
+        Output: The string "A Minor" is mapped to MIDI notes 69, 72, 76 (A, C, E) and dispatched.
 
 
 ### 🛠 Configuration (CLI)
