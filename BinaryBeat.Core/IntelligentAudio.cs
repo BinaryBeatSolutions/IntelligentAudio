@@ -6,6 +6,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace BinaryBeat.Core;
 
+/// <summary>
+/// IntelligentAudio
+/// </summary>
 public class IntelligentAudio : IDisposable
 {
     private readonly ChannelReader<byte[]> _audioReader;
@@ -13,6 +16,7 @@ public class IntelligentAudio : IDisposable
     private readonly OscService _oscService;
     private WhisperFactory _factory;
 
+    //Dev log
     Action<string> P = input =>
     {
         if (input.Length == 0) { return; }
@@ -21,6 +25,12 @@ public class IntelligentAudio : IDisposable
         #endif
     };
 
+    /// <summary>
+    /// Ctor
+    /// </summary>
+    /// <param name="audioReader">ChannelReader<byte[]> audioReader</param>
+    /// <param name="midiService">MidiOutputService midiService</param>
+    /// <param name="oscService">OscService oscService</param>
     public IntelligentAudio(ChannelReader<byte[]> audioReader, MidiOutputService midiService, OscService oscService)
     {
         _audioReader = audioReader;
@@ -28,10 +38,16 @@ public class IntelligentAudio : IDisposable
        _oscService = oscService;
     }
 
+    /// <summary>
+    /// Start listen to the microphone
+    /// </summary>
+    /// <param name="opt">Options</param>
+    /// <param name="ct">CansellationToken</param>
+    /// <returns></returns>
     public async Task StartListenAsync(Options opt, CancellationToken ct)
     {
+        //Ensure we have the Model donwloaded
         var path = await PathResolver.GetModelPath(opt.ModelName);
-
         _factory = WhisperFactory.FromPath(path);
 
         // Vi samlar ljudet i en lista tills vi har tillräckligt för Whisper
@@ -85,7 +101,7 @@ public class IntelligentAudio : IDisposable
 
     private async Task<string> ProcessWithWhisperAsync(byte[] raw441Bytes)
     {
-        // 1. Konvertera och Resampla (Dina steg 1 & 2 är perfekta!)
+        // 1. Konvertera och Resampla (steg 1 & 2 är perfekta!)
         var samples441 = new float[raw441Bytes.Length / 2];
         for (int i = 0; i < samples441.Length; i++)
         {

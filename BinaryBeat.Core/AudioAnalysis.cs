@@ -42,7 +42,7 @@ namespace BinaryBeat.Core
         /// <param name="samples"></param>
         /// <param name="inputSampleRate"></param>
         /// <param name="outputSampleRate"></param>
-        /// <returns></returns>
+        /// <returns>Resampled audio</returns>
         public static float[] Resample(float[] samples, int inputSampleRate, int outputSampleRate)
         {
             double ratio = (double)inputSampleRate / outputSampleRate;

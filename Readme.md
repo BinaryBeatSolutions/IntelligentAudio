@@ -1,9 +1,8 @@
 # BinaryBeat.IntelligentAudio
 
-IntelligentAudio is a high-performance .NET 8 application designed to bridge professional audio hardware and AI.
-
+***IntelligentAudio is a high-performance .NET 8 application designed to bridge professional audio hardware and AI.
 By leveraging OpenAI Whisper and asynchronous data pipelines, it transforms live audio input from high-end interfaces (like the Audient iD14)
-into actionable MIDI data and DAW control commands with surgical precision.
+into actionable MIDI data and DAW control commands with surgical precision. With the provided installer, it's easy to get started.***
 
 ## 🚀 Key Features
 
@@ -12,6 +11,7 @@ into actionable MIDI data and DAW control commands with surgical precision.
      Intelligent Noise Gate: RMS-based gating with Hysteresis and Hold-time logic to eliminate background hiss while ensuring musical tails are preserved for AI analysis.
      Asynchronous Producer-Consumer Pipeline: Powered by System.Threading.Channels to decouple audio capture from heavy AI inference, ensuring zero-drop reliability.
      Musical MIDI Mapping: Seamlessly converts interpreted text into MIDI note arrays via a logic-based ChordFactory.
+      
 
 ## 🛠 Technical Stack
 
@@ -20,34 +20,33 @@ into actionable MIDI data and DAW control commands with surgical precision.
     Audio I/O: NAudio
     Dependency Injection: Microsoft.Extensions.DependencyInjection
     Communications: System.Threading.Channels
+    Abelton MAX 9 LIVE axmd file containing the UI and the service call to BinaryBeat.exe
 
 ## 📦 Installation & Setup
 
     *) A complete installer is on it's way. More information will be published shortly.
 
-    If you want to discover the code and use it locally, use:
+    If you want to discover the code and use it locally:
     Clone the repository:
-    bash:> git clone https://github.com/BinaryBeatSolutions/IntelligentAudio.git
+    bash> git clone https://github.com/BinaryBeatSolutions/IntelligentAudio.git
+    Run the service in (VS) BinaryBeat and drag the provided IntelligenAudio.amxd file to Ablelton. 
+    The servive address: 127.0.0.1:7000
 
 ### Prerequisites
 
     Ensure you have the .NET 8 SDK installed. For MIDI output, a virtual MIDI cable like loopMIDI is recommended.
-
-    Models:
-    The application automatically handles model acquisition. On the first run, it will download 
+    Models: The application automatically handles model acquisition. On the first run, it will download 
     the required Whisper GGML models (e.g., ggml-tiny.en.bin) via the built-in PathResolver.
-    Run:
-    bash:> dotnet run --modelName ggml-tiny.en.bin
+    Run: bash:> dotnet run --modelName ggml-tiny.en.bin
 
 
 ### 🎹 Internal Architecture
 
-   ~~ Capture: MicrophoneSource captures 16-bit PCM data from the iD14.
-
+    Capture: MicrophoneSource captures 16-bit PCM data from the iD14.
     Processing: A High-pass filter removes low-end rumble, followed by an RMS calculation to determine if the signal exceeds the Threshold.
     Queueing: Valid audio buffers are pushed into an unbounded Channel<byte[]>.
     Inference: IntelligentAudio consumes the channel, accumulates buffers, and executes Whisper AI inference using a musical Prompt to force-focus on chord terminology.
-    Output: The string "A Minor" is mapped to MIDI notes 69, 72, 76 (A, C, E) and dispatched.~~
+    Output: The string "A Minor" is mapped to MIDI notes 69, 72, 76 (A, C, E) and dispatched.
 
 
 ### 🛠 Configuration (CLI)

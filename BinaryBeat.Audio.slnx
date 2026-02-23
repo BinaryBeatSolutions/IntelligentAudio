@@ -1,7 +1,12 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
     <File Path="BinaryBeat.iss" />
     <File Path="Readme.md" />
+  </Folder>
+  <Folder Name="/Solution Items/Ableton/">
+    <File Path="Ableton/BinaryBeat.amxd" />
+    <File Path="Ableton/binarybeat_launcher.js" />
   </Folder>
   <Project Path="BinaryBeat.Core/BinaryBeat.Core.csproj" />
   <Project Path="BinaryBeat/BinaryBeat.csproj" />

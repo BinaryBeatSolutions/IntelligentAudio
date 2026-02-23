@@ -14,9 +14,9 @@ async Task AudioEngineAsync(Options opt)
     string procName = Process.GetCurrentProcess().ProcessName;
     if (Process.GetProcessesByName(procName).Length > 1) return;
 
-    // 2. NU bygger vi tjänsterna
+    // Services
     var services = new ServiceCollection()
-        .AddSingleton(audioChannel.Reader) // Rekommenderar att bara använda Reader i IntelligentAudio
+        .AddSingleton(audioChannel.Reader) 
         .AddSingleton(audioChannel.Writer)
         .AddSingleton<MicrophoneSource>()
         .AddSingleton<MidiOutputService>()
@@ -33,16 +33,16 @@ async Task AudioEngineAsync(Options opt)
         var midi = serviceProvider.GetRequiredService<MidiOutputService>();
         var engine = serviceProvider.GetRequiredService<IntelligentAudio>(); 
 
-        // 1. Starta mikrofonen (Producenten)
-        // Den börjar lyssna på iD14 och skicka "tvättad" data till kanalen
+        // Start microphone
+        // Washed audio 
         mic?.Start(deviceNumber: 0);
 
-        // Denna loop körs så länge det finns data i kanalen
+        //Listen for audio
         var analysisTask = engine?.StartListenAsync(opt, cts.Token);
 
         P("System started");
         File.AppendAllText(logPath, $"[{DateTime.Now}] Start attempt from: {AppDomain.CurrentDomain.BaseDirectory}\n");
-        // Vänta på att analysen blir klar (eller att användaren avbryter)
+      
         await analysisTask;
 
         mic?.Stop();
