@@ -4,6 +4,12 @@
 By leveraging OpenAI Whisper and asynchronous data pipelines, it transforms live audio input from high-end interfaces (like the Audient iD14)
 into actionable MIDI data and DAW control commands with surgical precision. With the provided installer, it's easy to get started.***
 
+### Current development
+     A new Broadcast service (on it's way) will handle the connection between Ableton and the broadcast service.
+     The problem is that one instance need 1( and one only ) connection that communicate with the service. 
+     This is solved by uing a register/port and /unregister or /disconnected for each .amxd plugin added. 
+     This is important when we want to use the broadcastservice to alter any parameter in Ableton.
+
 ## 🚀 Key Features
 
      AI-Driven Chord Recognition: Utilizes Whisper.net to interpret spoken or played musical terms (e.g., "A Minor", "C# Maj7") with high contextual awareness.
