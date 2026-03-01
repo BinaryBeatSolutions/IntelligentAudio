@@ -1,4 +1,4 @@
-[IntelligentAudio.NET](https://github.com/BinaryBeatSolutions/IntelligentAudio.NET)
+Deprecated project, use -> [IntelligentAudio.NET](https://github.com/BinaryBeatSolutions/IntelligentAudio.NET).
 
 
 # BinaryBeat.IntelligentAudio (Testproject)
