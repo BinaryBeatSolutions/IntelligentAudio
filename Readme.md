@@ -1,4 +1,7 @@
-# BinaryBeat.IntelligentAudio
+[IntelligentAudio.NET](https://github.com/BinaryBeatSolutions/IntelligentAudio.NET)
+
+
+# BinaryBeat.IntelligentAudio (Testproject)
 
 ***IntelligentAudio is a high-performance .NET 8 application designed to bridge professional audio hardware and AI.
 By leveraging OpenAI Whisper and asynchronous data pipelines, it transforms live audio input from high-end interfaces (like the Audient iD14)
